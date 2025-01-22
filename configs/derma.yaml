@@ -1,0 +1,51 @@
+train:
+  epochs: 120
+  dense_constr: true 
+  conv_constr: true
+  lip: 10 
+  lip_start: 100
+  constr_freq: 1
+  constr_verbose_freq: 10 
+  test_freq: 1
+  warmup_epochs: 100
+  lazy_start_epochs: 0
+  buffer_size: 0
+  gradient_clip: 1
+  project: "abba_torch_med" # for wandb logging
+  log_activations: true
+
+optimizer:
+  name: "adam"
+  lr_standard: 0.001
+  lr_abba: 0.001
+  weight_decay: 0
+
+network:
+  in_ch: 3
+  n_classes: 7
+  inner_ch: [16, 32]
+  inner_k: 3
+  inner_s: 1
+  inner_p: 1
+  depths_dense: [128, 64]
+  first_projection: true
+  learn_halve_conv: false
+  learn_double_dense: false
+  learn_halve_dense: true
+  drop_conv: 0.6
+  drop_dense: 0.6
+  global_pool: false
+  hw: [64, 64]
+  simplified: false
+  add_bn_dense: false
+  add_bn_conv: false
+  add_last_conv: false 
+
+network_agg_ops:
+  - name: agg1
+    target: "torch.nn.Identity"
+    params: {}
+  - name: agg2
+    target: "torch.nn.AvgPool2d"
+    params: 
+      kernel_size: 4
