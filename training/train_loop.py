@@ -309,7 +309,7 @@ def train_loop(
     dense_constraint, dense_constraint_standard, conv_constraints, conv_constraint_standard, batch_norm_layers = get_constraint_objects(model, device=device)
 
     ### If log_wandb, these logged_metrics will be sent to W&B
-    save_model = False
+    save_model = True
     best_loss = torch.inf
     acc_at_best = 0
 
@@ -470,6 +470,10 @@ def train_loop(
                 best_loss = logged_metrics["test/loss"]
                 
                 acc_at_best = logged_metrics["test/acc"]
+
+                if not os.path.splitext(save_path)[1]:
+                    # If only the folder was specified
+                    save_path = os.path.join(save_path, "model.pth")
 
                 dir_name, file_name = os.path.split(save_path)
                 if not os.path.exists(dir_name):

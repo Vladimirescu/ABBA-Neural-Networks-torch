@@ -15,6 +15,7 @@ from utils.train_utils import get_agg_ops
 
 def test(model, test_loader, n_classes, criterion, attack, bounds=(-1, 1)):
     features = get_intermediate_outputs(model, test_loader)
+    
     for k in features.keys():
         print(f"{k} mean={features[k].mean()} std={features[k].std()}")
 
@@ -52,11 +53,19 @@ def test(model, test_loader, n_classes, criterion, attack, bounds=(-1, 1)):
     get_lips(model, batch_norm_layers=[], simplified=False, compute_global_conv=True)
     # get_lips(model, batch_norm_layers=[], simplified=True)
 
-    eps = [0.4 * i for i in range(11)]
+    eps_base = [0.4 * i for i in range(11)]
     if bounds == (-1, 1):
-        eps = [2 * x for x in eps]
+        eps = [2 * x for x in eps_base]
+    else:
+        eps = eps_base
+    
+    accs = acc_perturb_curve(model, test_loader, bounds=bounds, epsilons=eps, attack=attack)
+    accs = accs.tolist()
 
-    print(acc_perturb_curve(model, test_loader, bounds=bounds, epsilons=eps, attack=attack))
+    print(f"{'eps':<10}{'Acc [%]':<10}")
+    print("-" * 20)
+    for e, a in zip(eps_base, accs):
+        print(f"{e:<10.2f}{a * 100:.2f}")
 
 
 if __name__ == "__main__":

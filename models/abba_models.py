@@ -107,7 +107,7 @@ class FullyDenseABBA(nn.Module):
             abba_out_size = self.depths[-1] if self.simplified else 2 * self.depths[-1]
 
         if self.learn_halve:
-            output_halve = nn.Linear(abba_out_size, self.out_size)
+            output_halve = nn.Linear(abba_out_size, self.out_size, bias=False)
 
             halve_dense_init(output_halve)
             # nn.init.xavier_uniform_(output_halve.weight)
@@ -278,7 +278,7 @@ class FullyConvABBA(nn.Module):
         "Define input & output operators"
         if self.first_projection and len(self.inner_ch) > 0:
             proj_ch = self.inner_ch[0]
-            fp = nn.Conv2d(self.in_ch, proj_ch, (3, 3), (1, 1), padding=1)
+            fp = nn.Conv2d(self.in_ch, proj_ch, (1, 1), (1, 1), padding=0, bias=False)
 
             if self.simplified:
                 self.in_ch = proj_ch
@@ -479,7 +479,7 @@ class ConvDenseABBA(nn.Module):
         return np.prod(out.shape[1:])
 
 
-def get_intermediate_outputs(abba_model, dataloader, device):
+def get_intermediate_outputs(abba_model, dataloader, device="cuda"):
     """
     Returns a dictionary containing averaged activations for each ABBA layer.
 

@@ -1,7 +1,5 @@
 adversarial_robustness_toolbox==1.17.1
 all_models==0.1
-auto_LiRPA==0.5.0
-auto_LiRPA==0.3
 einops==0.8.0
 foolbox==3.3.3
 grad_cam==1.5.0

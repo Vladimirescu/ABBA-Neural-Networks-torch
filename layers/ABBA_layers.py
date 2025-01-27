@@ -48,6 +48,9 @@ class ABBA_Dense_Layer(nn.Module):
                  simplified: bool = False,
                  *args, **kwargs):
         """
+        ABBA Dense layer, accepting as input tensors of shape (B, 2 * in_units)
+        and returning outputs of shape (B, 2 * units). Both A & B matrices have shape (in_units, units).
+        
         :param in_units: size of input vector
         :param units: size of output vectors, i.e. the final output is 2 * units
         :param bias: if True, apply bias
@@ -117,8 +120,9 @@ class ABBA_Conv_Layer(nn.Module):
                  simplified: bool=False,
                  *args, **kwargs):
         """
-        ABBA Convolutional Layer. Contains two 2D conv operators, A and B, each with in_ch input channels
-        and out_ch output channgels.
+        ABBA Conv layer, accepting as input tensors of shape (B, 2 * in_ch, *, *)
+        and returning outputs of shape (B, 2 * out_ch, *, *). 
+        Both A & B matrices have shape (out_ch, in_ch, k, k).
 
         :param in_ch: int, input channels to A/B -> input has 2 * in_ch input channels
         :param out_ch: int, output channels/#filters for A/B -> output has 2 * out_ch output channels

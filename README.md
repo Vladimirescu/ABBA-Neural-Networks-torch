@@ -1,6 +1,24 @@
-# ABBA-Neural-Networks
+<style type="text/css">
+.generated-text {
+   font-family:'Courier New', monospace;
+   font-size:44px;
+   line-height:20px;
+   text-align:center;
+   font-weight: bold;
+   background: linear-gradient(90deg, #f36969 31%, #0f73c0 64%);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+   padding:20px;
+}
+</style>
+<div class="generated-text">ABBA Neural Networks</div>
 
-This repo contains functionalities for training ABBA Neural Networks with Lipschitz constraints for Adversarial Robustness, given the algorithms described in:
+<hr>
+
+This repo contains functionalities for training ABBA Neural Networks with Lipschitz constraints for Adversarial Robustness, for the algorithms described in:
 
 
 - [ABBA Neural Networks: Coping with Positivity, Expressivity, and Robustness](https://hal.science/hal-04386260/), SIAM SIMODS 2024
@@ -12,7 +30,7 @@ We provide additional results in the supplementary material, along with an analy
 Training is performed using [Lightning Fabric](https://lightning.ai/docs/fabric/stable/).
 
 
-## Getting Started
+# Getting Started
 
 Clone the repo:
 
@@ -38,17 +56,25 @@ conda activate new_env
 pip install -r requirements.txt
 ```
 
-## Usage
+Create a `TORCH_DATASETS_PATH` env variable to store the path to your datasets directly loaded through `torch`:
+
+```bash
+export TORCH_DATASETS_PATH=<your_path>
+```
+
+# Usage
 
 For both training and testing a `.yaml` configuration file, with name equal to dataset name should be placed in `./configs`. We'll update it with all remaining datasets soon ... 
 
-### Training a model
+**Note**: All images are normalized to [-1, 1]
+
+## Training a model
 
 ```bash
 python train.py <dataset> --save_p <checkpoint_path>
 ```
 
-### Testing a model
+## Testing a model
 
 ### Adversarial attacks performance
 
@@ -56,7 +82,9 @@ python train.py <dataset> --save_p <checkpoint_path>
 python attack.py <dataset> <checkpoint_path>
 ```
 
-### xAi metrics 🚧 
+**Note**: The estimated network bounds (i.e. `Total prod`) don't include the contribution of aggregation operators (e.g. `AvgPool2d`). 
+
+### xAi performance 🚧 
 
 ```TBA```
 
@@ -70,7 +98,7 @@ We find that, in some cases, using a scheduler over the imposed Lipschitz bound 
 
 ![sched](assets/lip_sched.png)
 
-The scheduler parameters can be controlled through the `.yaml` configs used for training: 
+This results in a final model with Lipschitz bound constrained to $\theta_{end}$. The scheduler parameters can be controlled through the `.yaml` configs used for training: 
 
 - $\theta_{start}$ : `lip_start`
 - $\theta_{end}$ : `lip`
@@ -106,5 +134,5 @@ If you find our work useful, consider citing the following:
 }
 ```
 
-# MLSP 2024 Poster
+# MLSP 2024 Poster 📎
 ![poster](assets/poster_MLSP.png)

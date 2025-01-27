@@ -335,6 +335,7 @@ def get_lips(model, batch_norm_layers, simplified=False, return_lips=False, comp
         print("BN Lip: ", bn_lip)
         print("Total prod: ", total_prod)
         print("Total prod without BN: ", total_prod_no_bn)
+        print("**Total prods do not include AvgPool contribution**")
         print("===============================")
 
         if return_lips:

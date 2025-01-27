@@ -4,9 +4,10 @@ import torchvision.transforms as transforms
 import tensorflow as tf
 import medmnist
 import numpy as np
+import os
 
 
-global_path = "/home/opis/aneacsu/torch_files/"
+global_path = os.getenv("TORCH_DATASETS_PATH")
 
 
 class Cutout(object):
