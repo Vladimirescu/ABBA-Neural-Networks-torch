@@ -116,7 +116,7 @@ def fmnist(bs=256, dense=False, bounds=(0, 1)):
 
 def rps(bs=256):
     in_shape = (150, 150, 3)
-    data_dir = "/scratch/aneacsu/rps-cv-images/"
+    data_dir = os.getenv("RPS_DATASET_PATH")
 
     train_ds = tf.keras.preprocessing.image_dataset_from_directory(
             data_dir,
@@ -175,14 +175,16 @@ def rps(bs=256):
 
 def celeba(bs=32):
     in_shape = (128, 128, 3)
+    data_dir = os.getenv("CELEBA_DATASET_PATH")
+    
     train_ds = tf.keras.utils.image_dataset_from_directory(
-        "/home/opis/aneacsu/conv2d_abbattack/CelebA_smaller/train/", 
+        os.path.join(data_dir, "train"), 
         label_mode="int", 
         color_mode="rgb",
         image_size=(in_shape[0], in_shape[1]),
         batch_size=128)
     test_ds = tf.keras.utils.image_dataset_from_directory(
-        "/home/opis/aneacsu/conv2d_abbattack/CelebA_smaller/test/", 
+        os.path.join(data_dir, "test"), 
         label_mode="int", 
         color_mode="rgb",
         image_size=(in_shape[0], in_shape[1]),
