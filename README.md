@@ -1,20 +1,6 @@
-<style type="text/css">
-.generated-text {
-   font-family:'Courier New', monospace;
-   font-size:44px;
-   line-height:20px;
-   text-align:center;
-   font-weight: bold;
-   background: linear-gradient(90deg, #f36969 31%, #0f73c0 64%);
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-fill-color: transparent;
-   padding:20px;
-}
-</style>
-<div class="generated-text">ABBA Neural Networks</div>
+<p align="center">
+  <img src="assets/abba_title.png" alt="abba_title">
+</p>
 
 <hr>
 
