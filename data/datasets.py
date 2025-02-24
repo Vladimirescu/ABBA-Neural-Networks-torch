@@ -1,7 +1,9 @@
 import torch
-import torchvision
+from torch.utils.data import DataLoader, Dataset, random_split
+
+import torchvision.datasets as datasets
 import torchvision.transforms as transforms
-import tensorflow as tf
+
 import medmnist
 import numpy as np
 import os
@@ -118,111 +120,71 @@ def rps(bs=256):
     in_shape = (150, 150, 3)
     data_dir = os.getenv("RPS_DATASET_PATH")
 
-    train_ds = tf.keras.preprocessing.image_dataset_from_directory(
-            data_dir,
-            image_size=(in_shape[0], in_shape[1]),
-            batch_size=64,
-            label_mode='int',
-            color_mode='rgb',
-            validation_split=0.2,
-            seed=2,
-            subset='training')
-    test_ds = tf.keras.preprocessing.image_dataset_from_directory(
-        data_dir,
-        image_size=(in_shape[0], in_shape[1]),
-        batch_size=64,
-        seed=2,
-        label_mode='int',
-        color_mode='rgb',
-        validation_split=0.2,
-        subset='validation')
+    transform = transforms.Compose([
+        transforms.Resize((in_shape[0], in_shape[1])),  
+        transforms.ToTensor(),  
+        transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])  
+    ])
     
-    x_train = None
-    y_train = None
-    for i, (x, y) in enumerate(train_ds):
-        if x_train is None:
-            x_train = x
-            y_train = y
-        else:
-            x_train = np.concatenate((x_train, x), axis=0)
-            y_train = np.concatenate((y_train, y), axis=0)
+    full_ds = datasets.ImageFolder(data_dir, transform=transform)
+    
+    train_size = int(0.8 * len(full_ds)) 
+    val_size = len(full_ds) - train_size  
+    train_ds, val_ds = random_split(full_ds, [train_size, val_size], generator=torch.Generator().manual_seed(2))
 
-    x_test = None
-    y_test = None
-    for i, (x, y) in enumerate(test_ds):
-        if x_test is None:
-            x_test = x
-            y_test = y
-        else:
-            x_test = np.concatenate((x_test, x), axis=0)
-            y_test = np.concatenate((y_test, y), axis=0)
-
-    x_train = np.transpose(x_train, (0, 3, 1, 2))
-    x_test = np.transpose(x_test, (0, 3, 1, 2))
-
-    train_dataset = torch.utils.data.TensorDataset(
-        torch.tensor(x_train / 255.0), torch.tensor(y_train, dtype=int)
+    train_loader = DataLoader(
+        train_ds, 
+        batch_size=bs, 
+        shuffle=True, 
+        num_workers=4,  
+        pin_memory=True  
     )
-    test_dataset = torch.utils.data.TensorDataset(
-        torch.tensor(x_test / 255.0), torch.tensor(y_test, dtype=int)
+    
+    val_loader = DataLoader(
+        val_ds, 
+        batch_size=bs, 
+        shuffle=False, 
+        num_workers=4,  
+        pin_memory=True 
     )
 
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=bs, shuffle=True)
-    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=bs, shuffle=False)
-
-    return train_loader, test_loader
+    return train_loader, val_loader
 
 
 def celeba(bs=32):
     in_shape = (128, 128, 3)
     data_dir = os.getenv("CELEBA_DATASET_PATH")
     
-    train_ds = tf.keras.utils.image_dataset_from_directory(
+    transform = transforms.Compose([
+        transforms.Resize((in_shape[0], in_shape[1])), 
+        transforms.ToTensor(),  
+        transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])  
+    ])
+    
+    train_ds = datasets.ImageFolder(
         os.path.join(data_dir, "train"), 
-        label_mode="int", 
-        color_mode="rgb",
-        image_size=(in_shape[0], in_shape[1]),
-        batch_size=128)
-    test_ds = tf.keras.utils.image_dataset_from_directory(
+        transform=transform
+    )
+    test_ds = datasets.ImageFolder(
         os.path.join(data_dir, "test"), 
-        label_mode="int", 
-        color_mode="rgb",
-        image_size=(in_shape[0], in_shape[1]),
-        batch_size=128,
-        seed=2) # put a seed in order to be able to align images in the same order when plotting results 
-
-    x_train = None
-    y_train = None
-    for i, (x, y) in enumerate(train_ds):
-        if x_train is None:
-            x_train = x
-            y_train = y
-        else:
-            x_train = np.concatenate((x_train, x), axis=0)
-            y_train = np.concatenate((y_train, y), axis=0)
-
-    x_test = None
-    y_test = None
-    for i, (x, y) in enumerate(test_ds):
-        if x_test is None:
-            x_test = x
-            y_test = y
-        else:
-            x_test = np.concatenate((x_test, x), axis=0)
-            y_test = np.concatenate((y_test, y), axis=0)
-
-    x_train = np.transpose(x_train, (0, 3, 1, 2))
-    x_test = np.transpose(x_test, (0, 3, 1, 2))
-
-    train_dataset = torch.utils.data.TensorDataset(
-        torch.tensor(x_train / 255.0), torch.tensor(y_train, dtype=int)
+        transform=transform
     )
-    test_dataset = torch.utils.data.TensorDataset(
-        torch.tensor(x_test / 255.0), torch.tensor(y_test, dtype=int)
+    
+    train_loader = DataLoader(
+        train_ds, 
+        batch_size=bs, 
+        shuffle=True, 
+        num_workers=4,  
+        pin_memory=True  
     )
-
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=bs, shuffle=True)
-    test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=bs, shuffle=False)
+    
+    test_loader = DataLoader(
+        test_ds, 
+        batch_size=bs, 
+        shuffle=False, 
+        num_workers=4, 
+        pin_memory=True  
+    )
 
     return train_loader, test_loader
 

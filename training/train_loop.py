@@ -309,7 +309,7 @@ def train_loop(
     dense_constraint, dense_constraint_standard, conv_constraints, conv_constraint_standard, batch_norm_layers = get_constraint_objects(model, device=device)
 
     ### If log_wandb, these logged_metrics will be sent to W&B
-    save_model = True
+    save_model = False
     best_loss = torch.inf
     acc_at_best = 0
 
@@ -327,7 +327,7 @@ def train_loop(
 
         """Start testing at each epoch and (optional) save model"""
         if lip_total == lip:
-            save_model = True if save_path else False
+            save_model = True if save_path is not None else False
             print("From now saving")
             test_freq = 1
 
