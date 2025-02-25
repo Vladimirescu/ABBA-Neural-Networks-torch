@@ -24,12 +24,20 @@ Clone the repo:
 git clone https://github.com/Vladimirescu/ABBA-Neural-Networks-torch.git
 ```
 
-Create new environment:
-
+Option #1: ```venv```
 
 ```bash
-conda env create -f environment.yml
-conda activate abba
+python -m venv abba
+source abba/bin/activate
+pip install -r requirements.txt
+```
+
+Option #2: ```conda```
+
+```bash
+conda create --name new_env python=3.9
+conda activate new_env
+pip install -r requirements.txt
 ```
 
 Create a `TORCH_DATASETS_PATH` env variable to store the path to your datasets directly loaded through `torch`:
