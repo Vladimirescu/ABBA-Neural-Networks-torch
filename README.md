@@ -9,7 +9,7 @@ This repo contains functionalities for training ABBA Neural Networks with Lipsch
 
 - [ABBA Neural Networks: Coping with Positivity, Expressivity, and Robustness](https://hal.science/hal-04386260/), SIAM SIMODS 2024
 
-- [Are almost non-negative neural networks universal approximators?](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=10734768), MLSP 2024
+- [Are almost non-negative neural networks universal approximators?](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=10734768), MLSP 2024 (check out the workshop poster below)
 
 We provide additional results in the supplementary material, along with an analysis for the computation time. The full journal paper + supplementary can be accessed [here](https://hal.science/hal-04386260v2/file/ABBA_Neural_Networks.pdf).
 
@@ -118,5 +118,9 @@ If you find our work useful, consider citing the following:
 }
 ```
 
-# MLSP 2024 Poster 📎
+## 📬 Contact
+
+If you have any questions regarding the code & algorithms, feel free to send an e-mail at [vasilescuvladmihai@gmail.com](mailto:vasilescuvladmihai@gmail.com).
+
+## 📎 MLSP 2024 Poster 
 ![poster](assets/poster_MLSP.png)
